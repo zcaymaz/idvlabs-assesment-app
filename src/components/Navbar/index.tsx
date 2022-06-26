@@ -20,6 +20,13 @@ const Navbar = () => {
             </Link>
           </Grid>
           <Grid item paddingLeft={2.7}>
+            <Link sx={{ textDecoration: 'none' }} href={'/myrecipes'}>
+              <NavbarButton variant="text">
+                <NavbarLink>Tariflerim</NavbarLink>
+              </NavbarButton>
+            </Link>
+          </Grid>
+          <Grid item paddingLeft={2.7}>
             <Link sx={{ textDecoration: 'none' }} href={'/login'}>
               <NavbarButton variant="text">
                 <NavbarLink>Giriş Yap</NavbarLink>
@@ -66,12 +73,19 @@ const Navbar = () => {
                   <NavbarLink color={'#000'} textTransform={'uppercase'}>AnaSayfa</NavbarLink>
                 </MenuItemLink>
               </MenuItem>
-              <Divider className="NavbarDivider" />
+              <Divider/>
+              <MenuItem>
+                <MenuItemLink href={'/myrecipes'}>
+                  <NavbarLink color={'#000'} textTransform={'uppercase'}>Tariflerim</NavbarLink>
+                </MenuItemLink>
+              </MenuItem>
+              <Divider/>
               <MenuItem>
                 <MenuItemLink href={'/login'}>
                   <NavbarLink color={'#000'} textTransform={'uppercase'}>Giriş Yap</NavbarLink>
                 </MenuItemLink>
               </MenuItem>
+              <Divider/>
               <MenuItem>
                 <MenuItemLink href={'/register'}>
                   <NavbarLink color={'#000'} textTransform={'uppercase'}>Üye Ol</NavbarLink>
