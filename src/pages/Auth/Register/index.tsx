@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { StyledCard, StyledContainer, StyledInput, StyledButton } from './styled'
 import axios from 'axios'
 
-function Register() {
+const Register:FC = () => {
     const [user, setUser] = useState({
         id: 0, name: '', email: '', password: ''
     })

@@ -1,9 +1,8 @@
 import React, { FC, useState } from 'react'
-import { Typography, IconButton, Grid, Button, Input } from '@mui/material'
+import { Typography, IconButton, Grid } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { StyledBox, StyledCard, StyledInput, StyledModal, StyledTypography, StyledButton } from './styled';
 import axios from 'axios'
-import FileUpload from '../FileUpload';
 
 interface IModal {
   type: 'add' | 'edit' | 'delete';
@@ -19,7 +18,7 @@ type IRecipe = {
 
 const RecipeModal: FC<IModal> = ({ type, recipe }) => {
   const [modal, setModal] = useState({
-    id: 0, title: '', description: '',
+    id: 0, title: '', description: '', userName: localStorage.getItem('userName'), userId: localStorage.getItem('userId')
   })
 
   const onChangeInput = (e: { target: { name: any; value: any } }) => {

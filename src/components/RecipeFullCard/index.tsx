@@ -1,64 +1,76 @@
-import { Grid, CardMedia, CardContent, Box, Button } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Card, CardMedia, Grid, Typography } from '@mui/material'
+import axios from 'axios';
+import { FC, useEffect, useState } from 'react'
 import deneme from '../../images/investors1.png'
-import { StyledBox, StyledText } from './styled'
-import axios from 'axios'
-import RecipeModal from '../RecipeModal'
-import { StyledButton } from '../RecipeModal/styled'
 
+type IComment = {
+    id: number;
+    zComment: string;
+    userId: number;
+    recipeId: number;
+}
 type IRecipe = {
-  id: number;
-  title: string;
-  description: string;
-  createDate?: string;
+    id: number;
+    title: string;
+    description: string;
+    createDate?: string;
+}
+const RecipeFullCard: FC = () => {
+    const [recipes, setRecipes] = useState<IRecipe[]>([]);
+    const [comments, setComments] = useState<IComment[]>([]);
+
+    const recipeData = async () => {
+        try {
+            const res = await axios.get(`https://localhost:7163/api/Recipes/byUserId/${localStorage.getItem('userId')}`);
+            setRecipes(res.data);
+            console.log(res);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const commentData = async () => {
+        try {
+            const res = await axios.get<IComment>(
+                `https://localhost:7163/api/Comment/byUserAndRecipeId${localStorage.getItem('RecipeId')}`);
+            setComments(res.data);
+            console.log(res);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        recipeData();
+        commentData();
+    }, []);
+
+    return (
+        <>
+            <Grid container justifyContent={'center'} direction={'row'} sx={{ bgcolor: 'red' }}>
+                <Card sx={{ bgcolor: '#ffffff', width: '42rem', minHeight: '42rem' }}>
+                    <Grid item xs={12}>
+                        <CardMedia src={deneme} sx={{ height: '250px', borderRadius: '3px' }} component={'img'} />
+                    </Grid>
+                    <Grid item xs={12} sx={{ bgcolor: 'blue', height: '60px' }}>
+                        <Typography>
+                            Başlık
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} sx={{ height: '180px', bgcolor: 'khaki' }}>
+                        <Typography>
+                            Açıklama
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography sx={{ width: '100%', bgcolor: 'yellow', textAlign: 'center' }}>
+                            {/* {recipes.zComment} */}
+                        </Typography>
+                    </Grid>
+                </Card>
+            </Grid>
+        </>
+    )
 }
 
-const RecipeFullCard = () => {
-  const [recipes, setRecipes] = useState<IRecipe[]>([]);
-
-  const recipeData = async () => {
-    try {
-      const res = await axios.get('https://localhost:7163/api/Recipes');
-      setRecipes(res.data);
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    recipeData();
-  }, []);
-
-  return (
-    <>
-      {recipes.map(recipe => {
-        return (
-          <StyledBox sx={{ width: { xs: '95%', sm: '85%', md: '70%', lg: '55%', xl: '45%' } }}>
-            <Grid item xs={12}>
-              <CardMedia src={deneme} sx={{ height: '350px', borderRadius: '3px' }} component={'img'} />
-            </Grid>
-            <CardContent>
-              <Grid item xs={12}>
-                <StyledText minHeight={'60px'}>
-                  {recipe.title}
-                </StyledText>
-              </Grid>
-              <Grid item xs={12}>
-                <StyledText minHeight={'180px'} fontSize={'24px'}>
-                  {recipe.description}
-                </StyledText>
-              </Grid>
-            </CardContent>
-            <Grid item xs={12} sx={{ textAlign: 'center' }}>
-              <RecipeModal recipe={recipe} type="edit" />
-              <RecipeModal recipe={recipe} type="delete" />
-            </Grid>
-          </StyledBox>
-        )
-      })}
-    </>
-  )
-}
-
-export default RecipeFullCard;
+export default RecipeFullCard
