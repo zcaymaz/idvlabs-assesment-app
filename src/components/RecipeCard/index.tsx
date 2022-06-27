@@ -4,6 +4,7 @@ import { StyledCard, StyledText } from './styled'
 import deneme from '../../images/investors1.png'
 import axios from 'axios'
 import moment from 'moment';
+import { stringify } from 'querystring'
 
 type IRecipe = {
     id: number;
@@ -36,7 +37,7 @@ const RecipeCard :FC = () => {
             {recipes.map(recipe => {
                 return (
                     <Grid item sx={{ margin: '1rem' }}>
-                        <CardActionArea>
+                        <CardActionArea onClick={() => localStorage.setItem('recipeId', recipe.id.toString() ) } href='/fullrecipes'>
                             <StyledCard>
                                 <Grid item xs={12}>
                                     <CardMedia src={deneme} sx={{ height: '170px', borderRadius: '3px' }} component={'img'} />
