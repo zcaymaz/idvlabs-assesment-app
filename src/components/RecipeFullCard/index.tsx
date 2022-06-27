@@ -1,8 +1,10 @@
-import { Grid, CardMedia, CardContent, Box } from '@mui/material'
+import { Grid, CardMedia, CardContent, Box, Button } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import deneme from '../../images/investors1.png'
 import { StyledBox, StyledText } from './styled'
 import axios from 'axios'
+import RecipeModal from '../RecipeModal'
+import { StyledButton } from '../RecipeModal/styled'
 
 type IRecipe = {
   id: number;
@@ -27,11 +29,12 @@ const RecipeFullCard = () => {
   useEffect(() => {
     recipeData();
   }, []);
+
   return (
     <>
       {recipes.map(recipe => {
         return (
-          <StyledBox>
+          <StyledBox sx={{ width: { xs: '95%', sm: '85%', md: '70%', lg: '55%', xl: '45%' } }}>
             <Grid item xs={12}>
               <CardMedia src={deneme} sx={{ height: '350px', borderRadius: '3px' }} component={'img'} />
             </Grid>
@@ -47,10 +50,9 @@ const RecipeFullCard = () => {
                 </StyledText>
               </Grid>
             </CardContent>
-            <Grid item xs={12} sx={{ bgcolor: 'red' }}>
-              <Box>
-                sapfkasşk
-              </Box>
+            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+              <RecipeModal recipe={recipe} type="edit" />
+              <RecipeModal recipe={recipe} type="delete" />
             </Grid>
           </StyledBox>
         )

@@ -1,8 +1,9 @@
-import { Grid, CardContent, CardMedia, CardActionArea } from '@mui/material'
+import { Grid, CardContent, CardMedia, CardActionArea, Button } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { StyledCard, StyledText } from './styled'
 import deneme from '../../images/investors1.png'
 import axios from 'axios'
+import moment from 'moment';
 
 type IRecipe = {
     id: number;
@@ -17,6 +18,7 @@ const RecipeCard = () => {
     const recipeData = async () => {
         try {
             const res = await axios.get('https://localhost:7163/api/Recipes');
+            
             setRecipes(res.data);
             console.log(res);
         } catch (error) {
@@ -51,7 +53,7 @@ const RecipeCard = () => {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <StyledText>
-                                            {recipe.createDate}
+                                        {moment(recipe.createDate).format('MMMM Do YYYY, h:mm:ss a')}
                                         </StyledText>
                                     </Grid>
                                 </CardContent>
