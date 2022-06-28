@@ -2,33 +2,17 @@ import { Grid, CardContent, CardMedia, CardActionArea } from '@mui/material'
 import { FC, useEffect, useState } from 'react'
 import { StyledCard, StyledText } from './styled'
 import image from '../../images/indir.jpeg'
-import axios from 'axios'
 import moment from 'moment';
-
-type IRecipe = {
-    id: number;
-    title: string;
-    description: string;
-    createDate?: string;
-    userName?: string;
-}
+import { getAllRecipes, TRecipe } from '../../services/recipeServices'
 
 const RecipeCard: FC = () => {
-    const [recipes, setRecipes] = useState<IRecipe[]>([]);
-
-    const recipeData = async () => {
-        try {
-            const res = await axios.get('https://localhost:7163/api/Recipes');
-
-            setRecipes(res.data);
-            console.log(res);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const [recipes, setRecipes] = useState<TRecipe[]>([]);
+    const getRecipes = async () => {
+        setRecipes(await getAllRecipes())
+      }
 
     useEffect(() => {
-        recipeData();
+        getRecipes();
     }, []);
 
     return (

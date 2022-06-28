@@ -2,7 +2,7 @@ import { Button, Card, Input, Typography } from "@mui/material";
 import styled from "styled-components";
 
 const StyledCard = styled(Card)`
-    box-shadow: 0px 4px 11px 1px rgba(0,0,0,1);
+    box-shadow: 0px 4px 11px 1px rgba(0,0,0,1) !important;
     min-height: 38rem;
     margin-top: 1rem;
     padding-bottom: 1rem;

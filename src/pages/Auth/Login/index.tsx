@@ -1,10 +1,10 @@
 import { FC, useState } from 'react'
 import { StyledCard, StyledContainer, StyledInput, StyledButton } from './styled'
-import axios from 'axios'
+import { login, TUser } from '../../../services/userServices'
 
 const Login: FC = () => {
-  const [user, setUser] = useState({
-    name: '', email: '', password: ''
+  const [user, setUser] = useState<TUser>({
+    id: 0, name:'', email: '', password: ''
   })
 
   const onChangeInput = (e: { target: { name: any; value: any } }) => {
@@ -12,19 +12,10 @@ const Login: FC = () => {
     setUser({ ...user, [name]: value })
   }
 
-  const loginSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault()
-    try {
-      const userData = await axios.post('https://localhost:7163/api/Users/api/Users/login', { ...user })
-
-      localStorage.setItem('userName', userData.data.name)
-      localStorage.setItem('userId', userData.data.id)
-
-      window.location.href = "/";
-    } catch (err: any) {
-      alert('Girmiş olduğunuz Mail adresi veya Şifre hatalı lütfen tekrar deneyiniz.')
-    }
+  const loginSubmit = async () => {
+    await login(user)
   }
+
   return (
     <>
       <StyledContainer
@@ -37,11 +28,11 @@ const Login: FC = () => {
           </h2>
           <StyledInput
             type="email" name="email" required placeholder="Email"
-            value={user.email} onChange={onChangeInput} />
+            value={user.email} onChange={(e) => onChangeInput(e)} />
           <StyledInput
             type="password" name="password" required placeholder="Parola"
-            value={user.password} onChange={onChangeInput} />
-          <StyledButton onClick={(e) => loginSubmit(e)}>
+            value={user.password} onChange={(e) => onChangeInput(e)} />
+          <StyledButton onClick={() => loginSubmit()}>
             Giriş Yap
           </StyledButton>
         </StyledCard>

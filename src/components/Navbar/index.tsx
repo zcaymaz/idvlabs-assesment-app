@@ -1,11 +1,11 @@
-import React, { FC } from "react";
+import { FC, useState } from 'react'
 import { Grid, Link, IconButton, Menu, MenuItem, Divider, CardMedia } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import { NavbarContainer, NavbarButton, NavbarLink, MenuItemLink } from './styled'
 import logo from '../../images/bread.png'
 
 const Navbar: FC = () => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
@@ -78,7 +78,7 @@ const Navbar: FC = () => {
               aria-controls={open ? 'demo-positioned-menu' : undefined}
               aria-haspopup="true"
               aria-expanded={open ? 'true' : undefined}
-              onClick={handleOpen}
+              onClick={() => handleOpen()}
               sx={{ float: 'right' }}>
               <MenuIcon sx={{ color: '#fff' }} fontSize="large" />
             </IconButton>

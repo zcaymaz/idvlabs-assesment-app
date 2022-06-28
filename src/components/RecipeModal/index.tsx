@@ -1,24 +1,21 @@
-import React, { FC, useState } from 'react'
+import { FC, useState } from 'react'
 import { Typography, IconButton, Grid } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { StyledBox, StyledCard, StyledInput, StyledModal, StyledTypography, StyledButton } from './styled';
-import axios from 'axios'
+import { TRecipe, addRecipe,updateRecipe, deleteRecipe } from '../../services/recipeServices'
 
 interface IModal {
   type: 'add' | 'edit' | 'delete';
-  recipe?: IRecipe;
-}
-
-type IRecipe = {
-  id: number;
-  title: string;
-  description: string;
-  createDate?: string;
+  recipe?: TRecipe;
 }
 
 const RecipeModal: FC<IModal> = ({ type, recipe }) => {
-  const [modal, setModal] = useState({
-    id: 0, title: '', description: '', userName: localStorage.getItem('userName'), userId: localStorage.getItem('userId')
+  const [modal, setModal] = useState<TRecipe>({
+    id: 0,
+    title: '', 
+    description: '', 
+    userName: (localStorage.getItem('userName') || ''), 
+    userId: parseInt(localStorage.getItem('userId') || '0')
   })
 
   const onChangeInput = (e: { target: { name: any; value: any } }) => {
@@ -26,72 +23,21 @@ const RecipeModal: FC<IModal> = ({ type, recipe }) => {
     setModal({ ...modal, [name]: value })
   }
 
-  const recipesSubmit = async () => {
-    try {
-      await axios.post('https://localhost:7163/api/Recipes', { ...modal })
-
-      window.location.href = "/";
-    } catch (err: any) {
-      console.log(err);
-    }
+  const addRecipes = async () => {
+    setModal(await addRecipe(modal))
+    window.location.href = '/'
   }
 
-  async function updateRecipe() {
-    try {
-      const { data } = await axios.put<IRecipe>(
-        `https://localhost:7163/api/Recipes/${recipe ? recipe.id : 0}`,
-        { title: modal.title, description: modal.description },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-        },
-      );
-
-      console.log(JSON.stringify(data, null, 4));
-
-      return data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log('error message: ', error.message);
-        // 👇️ error: AxiosError<any, any>
-        return error.message;
-      } else {
-        console.log('unexpected error: ', error);
-        return 'An unexpected error occurred';
-      }
-    }
+  const deleteRecipes = async () => {
+    await deleteRecipe(recipe ? recipe.id : 0)
   }
 
-  async function deleteRecipe() {
-    try {
-      const { data, status } = await axios.delete<IRecipe>(
-        `https://localhost:7163/api/Recipes/${recipe ? recipe.id : 0}`,
-        {
-          headers: {
-            Accept: 'application/json',
-          },
-        },
-      );
-
-      console.log('response is: ', data);
-
-      console.log('response status is: ', status);
-
-      return data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log('error message: ', error.message);
-        return error.message;
-      } else {
-        console.log('unexpected error: ', error);
-        return 'An unexpected error occurred';
-      }
-    }
+  const updateRecipes = async () => {
+    await updateRecipe(modal, recipe ? recipe.id : 0)
+    window.location.href = '/'
   }
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
@@ -100,7 +46,7 @@ const RecipeModal: FC<IModal> = ({ type, recipe }) => {
         styleColor={type === 'delete' ? 'red' : ''}
         border={type === 'delete' ? 'red 2px solid' : ''}
         marginLeft={type === 'delete' ? '10' : ''}
-        onClick={handleOpen}>
+        onClick={() => handleOpen()}>
         <Typography>
           {type === 'add' ? 'Yeni Tarif Ekle' : type === 'edit' ? 'Tarifi Düzenle' : 'Tarifi Sil'}
         </Typography>
@@ -123,14 +69,14 @@ const RecipeModal: FC<IModal> = ({ type, recipe }) => {
                 <Grid item xs={12}>
                   <StyledCard>
                     <Grid container direction='row' sx={{ fontSize: '18px', fontFamily: 'Mulish' }}>
-                      <form onSubmit={recipesSubmit} style={{ width: '100%' }}>
+                      <div style={{width:'100%'}}>
                         <Grid item xs={12}>
                           <Typography>
                             Yemek Adı
                           </Typography>
                           <StyledInput
                             type="text" name="title" id="title"
-                            required onChange={onChangeInput} value={modal.title} />
+                            required onChange={(e) => onChangeInput(e)} value={modal.title} />
                         </Grid>
                         <Grid item xs={12}>
                           <Typography>
@@ -138,10 +84,10 @@ const RecipeModal: FC<IModal> = ({ type, recipe }) => {
                           </Typography>
                           <StyledInput
                             rows={3} multiline required type="text"
-                            id="description" name="description" onChange={onChangeInput}
+                            id="description" name="description" onChange={(e) => onChangeInput(e)}
                             value={modal.description} />
                         </Grid>
-                      </form>
+                        </div>
                     </Grid>
                   </StyledCard>
                 </Grid>
@@ -151,7 +97,7 @@ const RecipeModal: FC<IModal> = ({ type, recipe }) => {
               <StyledButton
                 styleColor={type === 'delete' ? 'red' : ''}
                 border={type === 'delete' ? 'red 2px solid' : ''}
-                onClick={type === 'add' ? () => recipesSubmit() : type === 'edit' ? () => updateRecipe() : () => deleteRecipe()}>
+                onClick={type === 'add' ? () => addRecipes() : type === 'edit' ? () => updateRecipes() : () => deleteRecipes()}>
                 {type === 'add' ? 'Onayla' : type === 'edit' ? 'Düzenle' : 'Sil'}
               </StyledButton>
             </Grid>

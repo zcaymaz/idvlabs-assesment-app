@@ -1,29 +1,25 @@
 import { CardMedia, Divider, Grid, } from '@mui/material'
-import axios from 'axios';
 import { FC, useEffect, useState } from 'react'
 import image from '../../images/indir1.jpeg'
+import { getRecipesByRecipeId, TRecipe } from '../../services/recipeServices';
+import { getComments, addComment, TComment } from '../../services/commentServices';
 import { StyledButton, StyledCard, StyledInput, StyledText } from './styled';
 
-type TComment = {
-    id: number;
-    zComment: string;
-    userId: number;
-    recipeId: number;
-    userName?: string;
-}
-type TRecipe = {
-    id?: number;
-    title?: string;
-    description?: string;
-    createDate?: string;
-    userId?: number;
-    userName?: string;
-}
 const RecipeFullCard: FC = () => {
     const [recipes, setRecipes] = useState<TRecipe>();
+    const getRecipes = async () => {
+        setRecipes(await getRecipesByRecipeId())
+      }
     const [comments, setComments] = useState<TComment[]>([]);
-    const [zcomments, setZcomments] = useState({
-        id: 0, zComment: '', userName:(localStorage.getItem('userName')) , recipeId: parseInt(localStorage.getItem('recipeId') || '0'), userId: parseInt(localStorage.getItem('userId') || '0')
+    const getComment = async () => {
+        setComments(await getComments())
+    }
+    const [zcomments, setZcomments] = useState<TComment>({
+        id: 0, 
+        zComment: '', 
+        userName:(localStorage.getItem('userName') || '') , 
+        recipeId: parseInt(localStorage.getItem('recipeId') || '0'), 
+        userId: parseInt(localStorage.getItem('userId') || '0')
     })
 
     const onChangeInput = (e: { target: { name: any; value: any } }) => {
@@ -31,46 +27,18 @@ const RecipeFullCard: FC = () => {
         setZcomments({ ...zcomments, [name]: value })
     }
 
-    const commentSubmit = async () => {
-        try {
-            await axios.post('https://localhost:7163/api/Comment/byUserAndRecipeId', { ...zcomments })
-            commentData();
-        } catch (err: any) {
-            console.log(err);
-        }
+    const addCommentss = async () => {
+        setComments(await addComment(zcomments))
     }
 
-    const recipeData = async () => {
-        try {
-            const res = await axios.get(`https://localhost:7163/api/Recipes/${localStorage.getItem('recipeId')}`);
-            setRecipes(res.data);
-            console.log(res.data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const commentData = async () => {
-        try {
-            if (localStorage.getItem('recipeId')) {
-                const res = await axios.get(
-                    `https://localhost:7163/api/Comment/byRecipeId/${localStorage.getItem('recipeId')}`);
-                setComments(res.data);
-                console.log(res);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     useEffect(() => {
-        recipeData();
-        commentData();
+        getRecipes();
+        getComment();
     }, []);
 
     return (
         <>
-            <Grid container justifyContent={'center'} direction={'row'} sx={{ bgcolor: 'red' }}>
+            <Grid container justifyContent={'center'} direction={'row'}>
                 <StyledCard
                     sx={{ width: { xs: '98%', sm: '70%', md: '50%', lg: '35%', xl: '30%' } }}>
                     <Grid item xs={12}>
@@ -123,8 +91,8 @@ const RecipeFullCard: FC = () => {
                     <Grid item xs={12} sx={{ textAlign: 'center' }}>
                         <StyledInput
                             value={zcomments.zComment} placeholder="Yorum Yap..."
-                            multiline rows={2} name="zComment" onChange={onChangeInput} />
-                        <StyledButton onClick={commentSubmit}>
+                            multiline rows={2} name="zComment" onChange={(e) => onChangeInput(e)} />
+                        <StyledButton onClick={() => addCommentss()}>
                             Gönder
                         </StyledButton>
                     </Grid>
