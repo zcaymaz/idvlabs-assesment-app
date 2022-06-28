@@ -1,13 +1,15 @@
-import { Card, CardMedia, Grid, Typography } from '@mui/material'
+import { CardMedia, Divider, Grid, } from '@mui/material'
 import axios from 'axios';
 import { FC, useEffect, useState } from 'react'
-import deneme from '../../images/investors1.png'
+import image from '../../images/indir1.jpeg'
+import { StyledButton, StyledCard, StyledInput, StyledText } from './styled';
 
 type TComment = {
     id: number;
     zComment: string;
     userId: number;
     recipeId: number;
+    userName?: string;
 }
 type TRecipe = {
     id?: number;
@@ -20,6 +22,23 @@ type TRecipe = {
 const RecipeFullCard: FC = () => {
     const [recipes, setRecipes] = useState<TRecipe>();
     const [comments, setComments] = useState<TComment[]>([]);
+    const [zcomments, setZcomments] = useState({
+        id: 0, zComment: '', userName:(localStorage.getItem('userName')) , recipeId: parseInt(localStorage.getItem('recipeId') || '0'), userId: parseInt(localStorage.getItem('userId') || '0')
+    })
+
+    const onChangeInput = (e: { target: { name: any; value: any } }) => {
+        const { name, value } = e.target;
+        setZcomments({ ...zcomments, [name]: value })
+    }
+
+    const commentSubmit = async () => {
+        try {
+            await axios.post('https://localhost:7163/api/Comment/byUserAndRecipeId', { ...zcomments })
+            commentData();
+        } catch (err: any) {
+            console.log(err);
+        }
+    }
 
     const recipeData = async () => {
         try {
@@ -35,7 +54,7 @@ const RecipeFullCard: FC = () => {
         try {
             if (localStorage.getItem('recipeId')) {
                 const res = await axios.get(
-                `https://localhost:7163/api/Comment/byUserAndRecipeId?recipeId=${localStorage.getItem('recipeId')}&userId=${localStorage.getItem('userId')}`);
+                    `https://localhost:7163/api/Comment/byRecipeId/${localStorage.getItem('recipeId')}`);
                 setComments(res.data);
                 console.log(res);
             }
@@ -52,27 +71,64 @@ const RecipeFullCard: FC = () => {
     return (
         <>
             <Grid container justifyContent={'center'} direction={'row'} sx={{ bgcolor: 'red' }}>
-                <Card sx={{ bgcolor: '#ffffff', width: '42rem', minHeight: '42rem' }}>
+                <StyledCard
+                    sx={{ width: { xs: '98%', sm: '70%', md: '50%', lg: '35%', xl: '30%' } }}>
                     <Grid item xs={12}>
-                        <CardMedia src={deneme} sx={{ height: '250px', borderRadius: '3px' }} component={'img'} />
+                        <CardMedia src={image} component={'img'}
+                            sx={{ height: '300px', borderRadius: '3px' }} />
                     </Grid>
-                    <Grid item xs={12} sx={{ bgcolor: 'blue', height: '60px' }}>
-                        <Typography>
+                    <Grid item xs={12} sx={{ height: '60px', width: '100%' }}>
+                        <StyledText>
                             {recipes ? recipes.title : ''}
-                        </Typography>
+                            <Divider />
+                        </StyledText>
                     </Grid>
-                    <Grid item xs={12} sx={{ height: '180px', bgcolor: 'khaki' }}>
-                        <Typography>
+                    <Grid item xs={12} sx={{ height: '180px', width: '100%' }}>
+                        <StyledText fontSize={'22px'}>
                             {recipes ? recipes.description : ''}
-                        </Typography>
+                        </StyledText>
                     </Grid>
-
                     <Grid item xs={12}>
-                        <Typography sx={{ width: '100%', bgcolor: 'yellow', textAlign: 'center' }}>
-                            {comments[0] ? comments[0].zComment : ''}
-                        </Typography>
+                        <StyledText fontSize={'20px'}>
+                            Yorumlar
+                        </StyledText>
+                        <hr />
                     </Grid>
-                </Card>
+                    {comments.map(comment => {
+                        return (
+                            <>
+                                <Grid item xs={12} direction={'row'} alignItems={'center'}>
+                                    <StyledText Border={'1px #000 solid'} BorderRadius={'3px'} Bgcolor={'#f5f5f5'}>
+                                        <Grid container>
+                                            <Grid item xs={3}>
+                                                <StyledText
+                                                    fontSize={'16px'} Border={'1px #000 solid'} BorderRadius={'3px'}
+                                                    Bgcolor={'#f5f5f5'} Height={'48px'}>
+                                                    {comment.userName}
+                                                </StyledText>
+                                            </Grid>
+                                            <Grid item xs={9}>
+                                                <StyledText
+                                                    fontSize={'16px'} Border={'1px #000 solid'}
+                                                    BorderRadius={'3px'} Bgcolor={'#f5f5f5'} Height={'48px'}>
+                                                    {comment.zComment}
+                                                </StyledText>
+                                            </Grid>
+                                        </Grid>
+                                    </StyledText>
+                                </Grid>
+                            </>
+                        )
+                    })}
+                    <Grid item xs={12} sx={{ textAlign: 'center' }}>
+                        <StyledInput
+                            value={zcomments.zComment} placeholder="Yorum Yap..."
+                            multiline rows={2} name="zComment" onChange={onChangeInput} />
+                        <StyledButton onClick={commentSubmit}>
+                            Gönder
+                        </StyledButton>
+                    </Grid>
+                </StyledCard>
             </Grid>
         </>
     )

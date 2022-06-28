@@ -96,11 +96,11 @@ const RecipeModal: FC<IModal> = ({ type, recipe }) => {
   const handleClose = () => setOpen(false);
   return (
     <>
-      <StyledButton 
-      styleColor={type === 'delete' ? 'red' : ''}
-      border={type === 'delete' ? 'red 2px solid' : ''}
-      marginLeft={type === 'delete' ? '50' : ''}
-      onClick={handleOpen}>
+      <StyledButton
+        styleColor={type === 'delete' ? 'red' : ''}
+        border={type === 'delete' ? 'red 2px solid' : ''}
+        marginLeft={type === 'delete' ? '10' : ''}
+        onClick={handleOpen}>
         <Typography>
           {type === 'add' ? 'Yeni Tarif Ekle' : type === 'edit' ? 'Tarifi Düzenle' : 'Tarifi Sil'}
         </Typography>
@@ -128,13 +128,18 @@ const RecipeModal: FC<IModal> = ({ type, recipe }) => {
                           <Typography>
                             Yemek Adı
                           </Typography>
-                          <StyledInput type="text" name="title" id="title" required onChange={onChangeInput} value={modal.title} />
+                          <StyledInput
+                            type="text" name="title" id="title"
+                            required onChange={onChangeInput} value={modal.title} />
                         </Grid>
                         <Grid item xs={12}>
                           <Typography>
                             Açıklama
                           </Typography>
-                          <StyledInput rows={3} multiline type="text" name="description" id="description" required onChange={onChangeInput} value={modal.description} />
+                          <StyledInput
+                            rows={3} multiline required type="text"
+                            id="description" name="description" onChange={onChangeInput}
+                            value={modal.description} />
                         </Grid>
                       </form>
                     </Grid>
@@ -142,11 +147,11 @@ const RecipeModal: FC<IModal> = ({ type, recipe }) => {
                 </Grid>
               )}
             </Grid>
-            <Grid item xs={12} sx={{textAlign:'center'}}>
-              <StyledButton 
-              styleColor={type === 'delete' ? 'red' : ''} 
-              border={type === 'delete' ? 'red 2px solid' : ''} 
-              onClick={type === 'add' ? () => recipesSubmit() : type === 'edit' ? () => updateRecipe() :() => deleteRecipe()}>
+            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+              <StyledButton
+                styleColor={type === 'delete' ? 'red' : ''}
+                border={type === 'delete' ? 'red 2px solid' : ''}
+                onClick={type === 'add' ? () => recipesSubmit() : type === 'edit' ? () => updateRecipe() : () => deleteRecipe()}>
                 {type === 'add' ? 'Onayla' : type === 'edit' ? 'Düzenle' : 'Sil'}
               </StyledButton>
             </Grid>

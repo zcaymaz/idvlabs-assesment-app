@@ -3,9 +3,9 @@ import { FC, useEffect } from 'react';
 import MyRecipeCard from '../../components/MyRecipeCard'
 import RecipeModal from '../../components/RecipeModal'
 
-const Myrecipes :FC = () => {
+const Myrecipes: FC = () => {
     useEffect(() => {
-        if(localStorage.getItem('userName') && localStorage.getItem('userId')) {
+        if (localStorage.getItem('userName') && localStorage.getItem('userId')) {
             return;
         } else {
             window.location.href = "/login";
@@ -16,8 +16,10 @@ const Myrecipes :FC = () => {
             <Grid container justifyContent={'center'} direction={'row'}>
                 <RecipeModal type={'add'} />
             </Grid>
-            <Grid container justifyContent={'center'} direction={'row'} sx={{ overflowX: 'hidden', width: '100%', height: '93vh' }}>
-                <MyRecipeCard/>
+            <Grid
+                container justifyContent={'center'} direction={'row'}
+                sx={{ overflowX: 'hidden', width: '100%', height: '93vh' }}>
+                <MyRecipeCard />
             </Grid>
         </>
     )

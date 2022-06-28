@@ -54,6 +54,7 @@ const StyledButton = styled(Button)<{
     width: 120px;
     color: ${({ styleColor }) => styleColor || '#40b072'} !important;
     font-family: Mulish !important;
+    height: 60px;
 `
 
 export { StyledModal, StyledBox, StyledTypography, StyledCard, StyledInput, StyledButton }

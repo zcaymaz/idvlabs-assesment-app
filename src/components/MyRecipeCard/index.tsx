@@ -1,6 +1,6 @@
 import { Grid, CardMedia, CardContent } from '@mui/material'
 import { FC, useEffect, useState } from 'react'
-import deneme from '../../images/investors1.png'
+import image from '../../images/indir.jpeg'
 import { StyledBox, StyledText } from './styled'
 import axios from 'axios'
 import RecipeModal from '../RecipeModal'
@@ -12,7 +12,7 @@ type IRecipe = {
   createDate?: string;
 }
 
-const MyRecipeCard :FC = () => {
+const MyRecipeCard: FC = () => {
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
 
   const recipeData = async () => {
@@ -33,9 +33,11 @@ const MyRecipeCard :FC = () => {
     <>
       {recipes.map(recipe => {
         return (
-          <StyledBox sx={{ width: { xs: '95%', sm: '85%', md: '70%', lg: '55%', xl: '45%' } }}>
+          <StyledBox
+            sx={{ width: { xs: '98%', sm: '75%', md: '60%', lg: '45%', xl: '35%' } }}>
             <Grid item xs={12}>
-              <CardMedia src={deneme} sx={{ height: '350px', borderRadius: '3px' }} component={'img'} />
+              <CardMedia src={image} component={'img'}
+                sx={{ height: '400px', borderRadius: '6px' }} />
             </Grid>
             <CardContent>
               <Grid item xs={12}>
@@ -44,7 +46,7 @@ const MyRecipeCard :FC = () => {
                 </StyledText>
               </Grid>
               <Grid item xs={12}>
-                <StyledText minHeight={'180px'} fontSize={'24px'}>
+                <StyledText minHeight={'120px'} fontSize={'22px'}>
                   {recipe.description}
                 </StyledText>
               </Grid>

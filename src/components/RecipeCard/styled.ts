@@ -14,9 +14,9 @@ const StyledText = styled(Typography) <{
     minHeight?: string
 }>`
     font-weight: bold !important;
-    font-size:${({ fontSize }) => fontSize || '18px'} !important;
+    font-size:${({ fontSize }) => fontSize || '24px'} !important;
     line-height: 20px !important;
-    color: #5c5f64 !important;
+    color: #000 !important;
     font-family: Mulish !important;
     margin-top:${({ marginTop }) => marginTop || null} !important;
     min-height:${({ minHeight }) => minHeight || null};

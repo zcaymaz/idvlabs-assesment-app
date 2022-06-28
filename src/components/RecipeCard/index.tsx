@@ -1,10 +1,9 @@
 import { Grid, CardContent, CardMedia, CardActionArea } from '@mui/material'
 import { FC, useEffect, useState } from 'react'
 import { StyledCard, StyledText } from './styled'
-import deneme from '../../images/investors1.png'
+import image from '../../images/indir.jpeg'
 import axios from 'axios'
 import moment from 'moment';
-import { stringify } from 'querystring'
 
 type IRecipe = {
     id: number;
@@ -14,7 +13,7 @@ type IRecipe = {
     userName?: string;
 }
 
-const RecipeCard :FC = () => {
+const RecipeCard: FC = () => {
     const [recipes, setRecipes] = useState<IRecipe[]>([]);
 
     const recipeData = async () => {
@@ -37,10 +36,12 @@ const RecipeCard :FC = () => {
             {recipes.map(recipe => {
                 return (
                     <Grid item sx={{ margin: '1rem' }}>
-                        <CardActionArea onClick={() => localStorage.setItem('recipeId', recipe.id.toString() ) } href='/fullrecipes'>
+                        <CardActionArea href='/fullrecipes'
+                            onClick={() => localStorage.setItem('recipeId', recipe.id.toString())}>
                             <StyledCard>
                                 <Grid item xs={12}>
-                                    <CardMedia src={deneme} sx={{ height: '170px', borderRadius: '3px' }} component={'img'} />
+                                    <CardMedia src={image} component={'img'}
+                                        sx={{ height: '210px', borderRadius: '3px' }} />
                                 </Grid>
                                 <CardContent sx={{ textAlign: 'center' }}>
                                     <Grid item xs={12}>
@@ -49,7 +50,7 @@ const RecipeCard :FC = () => {
                                         </StyledText>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <StyledText fontSize={'14px'} minHeight={'100px'} marginTop={'5%'}>
+                                        <StyledText fontSize={'16px'} minHeight={'80px'} marginTop={'5%'}>
                                             {recipe.description}
                                         </StyledText>
                                     </Grid>
